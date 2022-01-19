@@ -1,10 +1,9 @@
 import { useQuery } from 'react-query'
-import { useContext } from 'react'
-import { useParams } from 'react-router-dom'
-import tokenContext from '../../tokenContext'
-import PostList from '../PostFolder/PostList'
-import AssignedTasksList from '../AssignmentFolder/AssignedTasksList'
-import QuizzesList from '../QuizFolder/QuizzesList'
+import { useContext, } from 'react'
+import { useParams, Link, Outlet } from 'react-router-dom'
+import userContext from '../../Contexts/userContext'
+
+
 
 const fetchClassDetail = async (token, class_id) => {
     const authToken = `Bearer ${token}`
@@ -19,8 +18,10 @@ const fetchClassDetail = async (token, class_id) => {
 }
 
 function SingleClass() {
+
     const { class_id } = useParams()
-    const { token } = useContext(tokenContext)
+    const { user } = useContext(userContext)
+    const token = user?.accessToken
     const { data: classDetail, isLoading } = useQuery('getClassDetail', () => fetchClassDetail(token, class_id), {
         refetchOnWindowFocus: false
     })
@@ -31,9 +32,10 @@ function SingleClass() {
     return (
         <div>
             <h1>{classDetail.name}</h1>
-            <AssignedTasksList token={token} class_id={class_id} />
-            <QuizzesList token={token} class_id={class_id} />
-            <PostList token={token} class_id={class_id} />
+            <Link to='tasks'>assignment</Link>
+            <Link to='quiz'>quiz</Link>
+            <Link to=''>post</Link>
+            <Outlet context={{ token, class_id }} />
 
         </div>
     )

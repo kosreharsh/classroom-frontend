@@ -1,6 +1,7 @@
 import Post from './Post'
 import { useQuery, useMutation } from 'react-query'
 import { useForm } from 'react-hook-form'
+import { useOutletContext } from 'react-router-dom'
 const fetchPostList = async (token, class_id) => {
     const authToken = `Bearer ${token}`
     const res = await fetch(`http://localhost:8000/api/v1/group/${class_id}/get_post_list/`, {
@@ -30,7 +31,8 @@ const addPost = async ({ token, class_id, inputData }) => {
 }
 
 
-function PostList({ token, class_id }) {
+function PostList() {
+    const { token, class_id } = useOutletContext()
     const { register, handleSubmit } = useForm()
     const { data: postData, isLoading } = useQuery('getPostList', () => fetchPostList(token, class_id), {
         refetchOnWindowFocus: false

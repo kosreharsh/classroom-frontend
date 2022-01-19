@@ -1,7 +1,8 @@
 // import { register, handleSubmit } from 'react-hook-form'
 import { useQuery } from 'react-query'
 import { useContext } from 'react'
-import tokenContext from '../tokenContext'
+import userContext from '../Contexts/userContext'
+
 import ClassCards from './ClassFolder/ClassCards'
 const fetchClasses = async (token) => {
     const authToken = `Bearer ${token}`
@@ -15,7 +16,9 @@ const fetchClasses = async (token) => {
     return res.json()
 }
 function Home() {
-    const { token } = useContext(tokenContext)
+    const { user } = useContext(userContext)
+    const token = user?.accessToken
+
     const { data, isLoading } = useQuery('getClassList', () => fetchClasses(token), {
         refetchOnWindowFocus: false
     })

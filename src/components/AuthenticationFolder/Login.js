@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
 import { useContext } from 'react'
-import tokenContext from '../../tokenContext'
+import userContext from '../../Contexts/userContext'
 const fetchToken = async (creditionals) => {
     const res = await fetch('http://localhost:8000/api/token/', {
         method: 'post',
@@ -14,16 +14,16 @@ const fetchToken = async (creditionals) => {
     return res.json()
 }
 function Login() {
-    const { setToken } = useContext(tokenContext)
+    const { setUser } = useContext(userContext)
     const { register, handleSubmit } = useForm()
     const Mutation = useMutation(fetchToken, {
         onSuccess: data => {
-            console.log(data)
-            setToken(data)
+
+            setUser(data)
         }
     })
     const onSubmit = (inputData) => {
-        console.log(inputData)
+
         Mutation.mutate(inputData)
     }
     return (
