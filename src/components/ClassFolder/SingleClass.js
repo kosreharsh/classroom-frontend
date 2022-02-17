@@ -2,6 +2,8 @@ import { useQuery } from 'react-query'
 import { useContext, } from 'react'
 import { useParams, Link, Outlet } from 'react-router-dom'
 import userContext from '../../Contexts/userContext'
+import { Box, Container, Typography } from '@mui/material'
+
 
 
 
@@ -30,14 +32,17 @@ function SingleClass() {
         return <h3>Loading...</h3>
     }
     return (
-        <div>
-            <h1>{classDetail.name}</h1>
-            <Link to='tasks'>assignment</Link>
-            <Link to='quiz'>quiz</Link>
-            <Link to=''>post</Link>
+        <Container>
+            <Typography variant='h3' mt={3}>{classDetail.name.toUpperCase()}</Typography>
+            <Box sx={{ 'marginTop': 1, 'paddingLeft': 1, 'width': 500, 'display': 'flex', 'justifyContent': 'space-between', }} >
+                <Link to=''><Typography variant='h5'>Post</Typography></Link>
+                <Link to='tasks'><Typography variant='h5'>Assignment</Typography></Link>
+                <Link to='quiz'><Typography variant='h5'>Quiz</Typography></Link>
+            </Box >
+
             <Outlet context={{ token, class_id }} />
 
-        </div>
+        </Container >
     )
 }
 

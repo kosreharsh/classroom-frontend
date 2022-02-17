@@ -2,8 +2,9 @@
 import { useQuery } from 'react-query'
 import { useContext } from 'react'
 import userContext from '../Contexts/userContext'
-
 import ClassCards from './ClassFolder/ClassCards'
+import { Container, List } from '@mui/material'
+
 const fetchClasses = async (token) => {
     const authToken = `Bearer ${token}`
     const res = await fetch('http://localhost:8000/api/v1/group/', {
@@ -19,6 +20,7 @@ function Home() {
     const { user } = useContext(userContext)
     const token = user?.accessToken
 
+
     const { data, isLoading } = useQuery('getClassList', () => fetchClasses(token), {
         refetchOnWindowFocus: false
     })
@@ -26,11 +28,17 @@ function Home() {
         return <h1>Loading</h1>
     }
     return (
-        <div>
-            {data.map((group, index) => {
-                return <ClassCards key={index} group={group} />
-            })}
-        </div>
+        <Container>
+            <div>
+                {user?.username}
+                <List >
+                    {data.map((group, index) => {
+                        return <ClassCards key={index} group={group} />
+                    })}
+                </List>
+
+            </div>
+        </Container>
     )
 }
 

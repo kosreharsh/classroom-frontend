@@ -31,8 +31,8 @@ function AssignedTask() {
     const { user } = useContext(userContext)
     const token = user?.accessToken
     const { id } = useParams()
-    const { register, handleSubmit } = useForm()
-    const { data: task, isLoading } = useQuery('getAssignedTask', () => fetchAssignedTask(token, id))
+    const { register, handleSubmit, reset } = useForm()
+    const { data: task, isLoading } = useQuery(`getAssignedTask-${id}`, () => fetchAssignedTask(token, id))
     const Mutation = useMutation(addAssignmentFiles, {
         onSuccess: (data) => {
             console.log(data)
@@ -41,6 +41,7 @@ function AssignedTask() {
     const onSubmit = async (inputData) => {
         const id = task.id
         Mutation.mutate({ token, id, inputData })
+        reset()
     }
     if (isLoading) {
         return <h4>Loading..</h4>
@@ -49,8 +50,8 @@ function AssignedTask() {
         <div>
             {task.title}
             <form onSubmit={handleSubmit(onSubmit)}>
-                <input type='file' {...register('attachments')} />
-                <input type='submit' value='Submit' />
+                <input style={{ 'height': 35, 'paddingLeft': 5, 'marginBottom': 5 }} type='file' {...register('attachments')} />
+                <input style={{ 'height': 35, 'paddingLeft': 5, 'marginBottom': 5 }} type='submit' value='Submit' />
             </form>
         </div>
     )

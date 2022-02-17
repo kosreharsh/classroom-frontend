@@ -15,29 +15,31 @@ import SignUp from './components/AuthenticationFolder/SignUp'
 import Login from './components/AuthenticationFolder/Login'
 import Home from './components/Home'
 import SingleClass from './components/ClassFolder/SingleClass'
-import PostList from './components/PostFolder/PostList';
+import PostList from './components/PostFolder/PostList'
 import AssignedTask from './components/AssignmentFolder/AssignedTask'
 import AssignedTasksList from './components/AssignmentFolder/AssignedTasksList';
-import Quiz from './components/QuizFolder/Quiz';
-import QuizzesList from './components/QuizFolder/QuizzesList';
+import Quiz from './components/QuizFolder/Quiz'
+import QuizzesList from './components/QuizFolder/QuizzesList'
+import Meeting from './components/MeetingFolder/Meeting'
+import CreateMeet from './components/MeetingFolder/CreateMeet'
 
 
 function App() {
   // const [token, setToken] = useToken()
-  const [user, setUser] = useUser()
+  const [user, setUser, logout] = useUser()
 
   return (
     <Router>
       {/* <tokenContext.Provider value={{ token, setToken }} >
       </tokenContext.Provider> */}
-      <userContext.Provider value={{ user, setUser }}>
+      <userContext.Provider value={{ user, setUser, logout }}>
         <QueryClientProvider client={queryClient}>
           <Navbar />
           <Routes>
             <Route exact path='/' element={user ? <Navigate to='/home' /> : <HomePage />} />
             <Route path='/home' element={!user ? <Navigate to='/' /> : <Home />} />
-            <Route path='/signup' element={user ? <Navigate to='/home' /> : <SignUp />} />
-            <Route path='/login' element={user ? <Navigate to='/home' /> : <Login />} />
+            <Route path='/signup' element={!user && <SignUp />} />
+            <Route path='/login' element={!user && <Login />} />
             <Route path='/class/:class_id' element={!user ? <Navigate to='/' /> : <SingleClass />} >
               <Route path='' element={<PostList />} />
               <Route path='tasks/*' element={<AssignedTasksList />}>
@@ -47,6 +49,8 @@ function App() {
                 <Route path=':quiz_id' element={<Quiz />} />
               </Route>
             </Route>
+            <Route path='/create_meet' element={<CreateMeet />} />
+            <Route path='/meet/:roomName' element={<Meeting />} />
           </Routes>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

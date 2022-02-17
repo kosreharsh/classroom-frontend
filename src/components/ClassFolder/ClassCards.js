@@ -1,10 +1,25 @@
+import { Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { Link } from 'react-router-dom'
-
+import FolderIcon from '@mui/icons-material/Folder';
 function ClassCards({ group }) {
     return (
-        <div>
-            <Link to={`/class/${group.id}/`}>{group.name}</Link>
-        </div>
+
+        <Link to={`/class/${group.id}/`}>
+            <ListItem >
+                <ListItemAvatar>
+                    <Avatar>
+                        <FolderIcon />
+                    </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                    primary={group.name}
+
+                />
+            </ListItem>
+        </Link>
+
+
+
     )
 }
 

@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import userContext from '../../Contexts/userContext'
+import { useNavigate } from 'react-router-dom'
 const fetchToken = async (creditionals) => {
     const res = await fetch('http://localhost:8000/api/token/', {
         method: 'post',
@@ -11,15 +12,25 @@ const fetchToken = async (creditionals) => {
         },
         body: JSON.stringify(creditionals)
     })
-    return res.json()
+    if (res.ok) {
+        return res.json()
+    }
+    return null
 }
 function Login() {
+    const navigate = useNavigate()
+    const [showError, setShowError] = useState(false)
     const { setUser } = useContext(userContext)
     const { register, handleSubmit } = useForm()
     const Mutation = useMutation(fetchToken, {
-        onSuccess: data => {
-
-            setUser(data)
+        onSuccess: async data => {
+            if (data !== null) {
+                setUser(data)
+                navigate('/home')
+            }
+            else {
+                setShowError(true)
+            }
         }
     })
     const onSubmit = (inputData) => {
@@ -27,11 +38,14 @@ function Login() {
         Mutation.mutate(inputData)
     }
     return (
-        <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input type='text' {...register("username")} />
-                <input type='password' {...register("password")} />
-                <input type='submit' value="Submit" />
+        <div style={{ 'display': 'flex', 'justifyContent': 'center' }}>
+
+            <form style={{ 'marginTop': 100, 'display': 'flex', 'flexDirection': 'column', 'justifyContent': 'center', 'width': 300 }} onSubmit={handleSubmit(onSubmit)}>
+                <h2 style={{ 'marginBottom': 10 }}>Login Form</h2>
+                {showError && <p style={{ border: "1px solid red" }}>Wrong creditionals</p>}
+                <input style={{ 'height': 35, 'marginBottom': 5, 'padding': 5 }} type='text' placeholder='Username' {...register("username")} />
+                <input style={{ 'height': 35, 'marginBottom': 5, 'padding': 5 }} type='password' placeholder='Password'{...register("password")} />
+                <input style={{ 'height': 35, 'marginBottom': 5 }} type='submit' value="Submit" />
             </form>
         </div>
     )

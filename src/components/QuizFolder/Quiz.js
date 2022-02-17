@@ -43,11 +43,8 @@ function Quiz() {
     return (
         <div>
             {data.quizname}
-
-
             <ul>
                 {
-
                     question_set.map((q, index) => {
                         return <li key={index}>{q.question}</li>
                     })

@@ -1,10 +1,17 @@
+import { ListItem, ListItemText } from "@mui/material"
+
 
 
 function Post({ post }) {
     return (
-        <div>
-            <p>{post.message}</p>
-        </div>
+
+        <ListItem >
+
+            <ListItemText
+                primary={post.message}
+
+            />
+        </ListItem>
     )
 }
 
